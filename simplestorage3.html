@@ -128,7 +128,7 @@ function getTransactionsByAccount(myaccount, startBlockNumber, endBlockNumber) {
 
 
   if (startBlockNumber == null) {
-    startBlockNumber = endBlockNumber - 100;
+    startBlockNumber = endBlockNumber - 500;
     console.log("Using startBlockNumber: " + startBlockNumber);
   }
   console.log("Searching for transactions to/from account \"" + myaccount + "\" within blocks "  + startBlockNumber + " and " + endBlockNumber);
@@ -151,8 +151,7 @@ function getTransactionsByAccount(myaccount, startBlockNumber, endBlockNumber) {
 
 					block.transactions.forEach( function(e)
 					  {
-						 //console.log(e);
-
+						 console.log(e);
 						  web3.eth.getTransaction(e, function(e, r){
 							if (myaccount == "*" || myaccount == r.to)
 							{
