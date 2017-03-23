@@ -14,7 +14,7 @@
 <body>
 <h3>Simple Storage dApp 예제</h3>
 <ul>
-  <li>컨트랙트 주소: <span id="contractAddr" /></span></li>
+  <li>컨트랙트 주소: <span id="contractAddr" /></span> <a href="javascript:changeContractAddr()">[주소변경]</a></li>
 
   <li>내 어카운트 주소: <span id="accountAddr"></span></li>
   <li>컨트랙트에 저장된 값: <span id="storedData"></span>
@@ -40,7 +40,7 @@ var contractAddress = '0x9101df01fd6c7311b6f32dfc8e7a7c32c28e4bb4';
 var abi = [{"constant":false,"inputs":[{"name":"x","type":"uint256"}],"name":"set","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"get","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"}];
 var simpleStorageContract;
 var simpleStorage;
-
+var lastBlockNumber;
 window.addEventListener('load', function() {
 
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
@@ -78,6 +78,7 @@ function getValue() {
   });
   web3.eth.getBlockNumber(function(e,r){
     document.getElementById('lastBlock').innerHTML = r;
+	lastBlockNumber = r;
   });
 }
 
@@ -103,5 +104,92 @@ function setValue() {
  });
 }
 
+function changeContractAddr()
+{
+	var newAddr = prompt("컨트랙트 주소를 입력하세요.");
+	if (newAddr)
+	{
+		contractAddress = newAddr;
+		startApp();
+	}
+}
+//function(e,r){console.log(r);}
+//getTransactionsByAccount(contractAddress);
+
+function getTransactionsByAccount(myaccount, startBlockNumber, endBlockNumber) {
+
+  if (endBlockNumber == null) {
+	endBlockNumber = lastBlockNumber;
+	//endBlockNumber = 750996;
+
+
+    console.log("Using endBlockNumber: " + endBlockNumber);
+  }
+
+
+  if (startBlockNumber == null) {
+    startBlockNumber = endBlockNumber - 100;
+    console.log("Using startBlockNumber: " + startBlockNumber);
+  }
+  console.log("Searching for transactions to/from account \"" + myaccount + "\" within blocks "  + startBlockNumber + " and " + endBlockNumber);
+
+    var block;
+  for (var i = endBlockNumber; i >= startBlockNumber; i--)
+  {
+    if (i % 1000 == 0)
+	{
+      console.log("Searching block " + i);
+    }
+
+		web3.eth.getBlock(i, function(e,r)
+			{
+				block = r;
+				if (block != null && block.transactions != null)
+				{
+
+					//console.log(block);
+
+					block.transactions.forEach( function(e)
+					  {
+						 //console.log(e);
+
+						  web3.eth.getTransaction(e, function(e, r){
+							if (myaccount == "*" || myaccount == r.to)
+							{
+							  console.log("  tx hash          : " + r.hash + "\n"
+								+ "   nonce           : " + r.nonce + "\n"
+								+ "   blockHash       : " + r.blockHash + "\n"
+								+ "   blockNumber     : " + r.blockNumber + "\n"
+								+ "   transactionIndex: " + r.transactionIndex + "\n"
+								+ "   from            : " + r.from + "\n"
+								+ "   to              : " + r.to + "\n"
+								+ "   value           : " + r.value + "\n"
+								+ "   time            : " + block.timestamp + " " + new Date(block.timestamp * 1000).toGMTString() + "\n"
+								+ "   gasPrice        : " + r.gasPrice + "\n"
+								+ "   gas             : " + r.gas + "\n"
+								+ "   input           : " + r.input);
+							}
+
+						  });
+
+					 }
+					)
+				}
+			}
+		)
+
+  }
+}
+
+function fTR(e, r)
+{
+	if (e)
+	{
+	}
+	else
+	{
+		console.log(r);
+	}
+}
 </script>
 </html>

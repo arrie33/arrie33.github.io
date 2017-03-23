@@ -14,7 +14,7 @@
 <body>
 <h3>Simple Storage dApp 예제</h3>
 <ul>
-  <li>컨트랙트 주소: <span id="contractAddr" /></span></li>
+  <li>컨트랙트 주소: <span id="contractAddr" /></span> <a href="javascript:changeContractAddr()">[주소변경]</a></li>
 
   <li>내 어카운트 주소: <span id="accountAddr"></span></li>
   <li>컨트랙트에 저장된 값: <span id="storedData"></span>
@@ -101,6 +101,16 @@ function setValue() {
       }
    });
  });
+}
+
+function changeContractAddr()
+{
+	var newAddr = prompt("컨트랙트 주소를 입력하세요.");
+	if (newAddr)
+	{
+		contractAddress = newAddr;
+		startApp();
+	}
 }
 
 </script>
