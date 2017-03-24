@@ -152,7 +152,7 @@ function getContractHistory()
 						historycnt++;
 						lastBlockNumber = r[i].blockNumber;
 						console.log(r[i]);
-						historyList += historycnt + ".  BlockNumber : <a href='https://testnet.etherscan.io/tx/" + r[i].blockNumber + "' target='_blank'>" + r[i].blockNumber + "</a>"
+						historyList += historycnt + ".  BlockNumber : <a href='https://testnet.etherscan.io/block/" + r[i].blockNumber + "' target='_blank'>" + r[i].blockNumber + "</a>"
 									+ " / TransactionHash : " + r[i].transactionHash
 									+ " / TransactionLogIndex : " + r[i].transactionLogIndex
 									+ " / BlockHash : " + r[i].blockHash + "<Br /><Br />";
